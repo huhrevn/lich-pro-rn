@@ -1,0 +1,29 @@
+{
+    "project_info": {
+        "project_number": "1019420017524",
+        "project_id": "lichprorn",
+        "storage_bucket": "lichprorn.firebasestorage.app"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:1019420017524:android:54c91fd97037d6ef1d6221",
+                "android_client_info": {
+                    "package_name": "com.lichprorn"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyCjMaVTBXwWW1l7GEY96oodkaWzWsGuBeU"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}
