@@ -1,97 +1,138 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Lịch Pro - React Native
 
-# Getting Started
+Ứng dụng Lịch Việt Nam với đầy đủ tính năng âm lịch, xem ngày tốt xấu, và quản lý sự kiện.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## ✨ Tính năng
 
-## Step 1: Start Metro
+- 🏠 **Trang chủ**: Hiển thị ngày âm lịch, giờ hoàng đạo
+- 📅 **Lịch**: Xem lịch tháng và sự kiện
+- 🔄 **Đổi lịch**: Chuyển đổi dương lịch ⟷ âm lịch
+- 📝 **Nhật ký**: Ghi chép hàng ngày
+- 🙏 **Kinh cầu**: Các lời kinh phổ biến
+- 🌍 **Đồng hồ thế giới**: Xem giờ các múi giờ
+- ⭐ **Xem bói**: Tử vi, Tarot, Kinh Dịch
+- 💌 **Lời chúc**: Lời chúc các dịp lễ
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## 🚀 Cài đặt
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Yêu cầu
+- Node.js 18+
+- npm hoặc yarn
+- Xcode (cho iOS) hoặc Android Studio (cho Android)
 
-```sh
-# Using npm
-npm start
+### Bước 1: Clone và cài dependencies
 
-# OR using Yarn
-yarn start
-```
+\`\`\`bash
+cd "c:\\Users\\Admin\\Desktop\\Ai\\LICH\\lich\\LICH PRO\\LichProRN"
+npm install
+\`\`\`
 
-## Step 2: Build and run your app
+### Bước 2: Cài CocoaPods (chỉ iOS)
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+\`\`\`bash
+cd ios
+pod install
+cd ..
+\`\`\`
 
-### Android
+### Bước 3: Chạy app
 
-```sh
-# Using npm
-npm run android
+**iOS (cần Mac):**
+\`\`\`bash
+npx react-native run-ios
+\`\`\`
 
-# OR using Yarn
-yarn android
-```
+**Android:**
+\`\`\`bash
+npx react-native run-android
+\`\`\`
+
+## 📁 Cấu trúc thư mục
+
+\`\`\`
+LichProRN/
+├── src/
+│   ├── navigation/      # React Navigation setup
+│   ├── screens/         # Tất cả màn hình
+│   │   ├── HomeScreen.tsx
+│   │   ├── CalendarScreen.tsx
+│   │   ├── ConverterScreen.tsx
+│   │   ├── JournalScreen.tsx
+│   │   ├── PrayersScreen.tsx
+│   │   ├── WorldClockScreen.tsx
+│   │   ├── FortuneScreen.tsx
+│   │   ├── GreetingsScreen.tsx
+│   │   └── SettingsScreen.tsx
+│   ├── components/      # Components tái sử dụng
+│   ├── contexts/        # React Contexts
+│   ├── hooks/           # Custom hooks
+│   ├── services/        # Firebase, Google Calendar
+│   └── types/           # TypeScript types
+├── ios/                 # iOS native code
+├── android/             # Android native code
+└── App.tsx             # Entry point
+\`\`\`
+
+## 🔧 Cấu hình
+
+### Firebase (Optional)
+1. Tạo project trên Firebase Console
+2. Download \`google-services.json\` (Android) và \`GoogleService-Info.plist\` (iOS)
+3. Đặt vào thư mục tương ứng
+
+### Google Sign-In (Optional)
+1. Cấu hình OAuth trong Google Cloud Console
+2. Thêm iOS Client ID và Android Client ID
+3. Cập nhật trong \`src/services/firebase.ts\`
+
+## 📱 Build Production
 
 ### iOS
+\`\`\`bash
+cd ios
+xcodebuild -workspace LichProRN.xcworkspace -scheme LichProRN -configuration Release archive
+\`\`\`
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+### Android
+\`\`\`bash
+cd android
+./gradlew assembleRelease
+\`\`\`
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## 🎨 Tùy chỉnh
 
-```sh
-bundle install
-```
+- **Màu sắc**: Sửa trong \`styles\` của từng screen
+- **Font**: Thêm custom fonts vào \`assets/fonts\`
+- **Icons**: Sử dụng emoji hoặc cài \`react-native-vector-icons\`
 
-Then, and every time you update your native dependencies, run:
+## 📝 Ghi chú
 
-```sh
-bundle exec pod install
-```
+- App đã được convert từ phiên bản Capacitor
+- Business logic được giữ nguyên từ version cũ
+- UI được viết lại hoàn toàn cho React Native
+- Một số tính năng nâng cao cần cấu hình thêm
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+## 🐛 Troubleshooting
 
-```sh
-# Using npm
-npm run ios
+### Lỗi Metro Bundler
+\`\`\`bash
+npx react-native start --reset-cache
+\`\`\`
 
-# OR using Yarn
-yarn ios
-```
+### Lỗi CocoaPods
+\`\`\`bash
+cd ios
+pod deintegrate
+pod install
+\`\`\`
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+### Lỗi Gradle
+\`\`\`bash
+cd android
+./gradlew clean
+\`\`\`
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## 📄 License
 
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+MIT License
+\`\`\`

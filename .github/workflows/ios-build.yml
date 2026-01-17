@@ -1,0 +1,47 @@
+name: Build React Native iOS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-ios:
+    name: Build iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: Build iOS App
+        run: |
+          cd ios
+          xcodebuild -workspace LichProRN.xcworkspace -scheme LichProRN -configuration Release -destination generic/platform=iOS -archivePath build/LichProRN.xcarchive archive CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO
+          
+      - name: Create IPA Package
+        run: |
+          cd ios
+          mkdir -p Payload
+          cp -r build/LichProRN.xcarchive/Products/Applications/LichProRN.app Payload/
+          zip -r LichProRN.ipa Payload
+          
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LichProRN-iOS
+          path: ios/LichProRN.ipa
+          retention-days: 30
