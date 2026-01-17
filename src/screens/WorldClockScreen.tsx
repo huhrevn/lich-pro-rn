@@ -1,50 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
+    ScrollView,
     StyleSheet,
     SafeAreaView,
-    ScrollView,
+    TouchableOpacity,
+    TextInput,
 } from 'react-native';
 
+const worldClocks = [
+    { city: 'Hà Nội', timezone: 'Asia/Ho_Chi_Minh', offset: 7 },
+    { city: 'Tokyo', timezone: 'Asia/Tokyo', offset: 9 },
+    { city: 'Seoul', timezone: 'Asia/Seoul', offset: 9 },
+    { city: 'Singapore', timezone: 'Asia/Singapore', offset: 8 },
+    { city: 'London', timezone: 'Europe/London', offset: 0 },
+    { city: 'New York', timezone: 'America/New_York', offset: -5 },
+    { city: 'Los Angeles', timezone: 'America/Los_Angeles', offset: -8 },
+    { city: 'Sydney', timezone: 'Australia/Sydney', offset: 11 },
+    { city: 'Paris', timezone: 'Europe/Paris', offset: 1 },
+    { city: 'Berlin', timezone: 'Europe/Berlin', offset: 1 },
+];
+
 const WorldClockScreen = () => {
-    const [time, setTime] = useState(new Date());
-
-    useEffect(() => {
-        const timer = setInterval(() => setTime(new Date()), 1000);
-        return () => clearInterval(timer);
-    }, []);
-
-    const timezones = [
-        { name: 'Hà Nội', offset: 7, flag: '🇻🇳' },
-        { name: 'Tokyo', offset: 9, flag: '🇯🇵' },
-        { name: 'London', offset: 0, flag: '🇬🇧' },
-        { name: 'New York', offset: -5, flag: '🇺🇸' },
-        { name: 'Sydney', offset: 11, flag: '🇦🇺' },
-    ];
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentTime] = useState(new Date());
 
     const getTimeForTimezone = (offset: number) => {
-        const utc = time.getTime() + (time.getTimezoneOffset() * 60000);
-        const newTime = new Date(utc + (3600000 * offset));
-        return newTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const utc = currentTime.getTime() + currentTime.getTimezoneOffset() * 60000;
+        const cityTime = new Date(utc + 3600000 * offset);
+        return cityTime;
     };
+
+    const filteredClocks = worldClocks.filter(clock =>
+        clock.city.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Đồng hồ thế giới</Text>
+                <Text style={styles.title}>Giờ Thế Giới</Text>
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="Tìm thành phố..."
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
             </View>
 
-            <ScrollView style={styles.content}>
-                {timezones.map((tz, index) => (
-                    <View key={index} style={styles.clockCard}>
-                        <Text style={styles.flag}>{tz.flag}</Text>
-                        <View style={styles.info}>
-                            <Text style={styles.cityName}>{tz.name}</Text>
-                            <Text style={styles.time}>{getTimeForTimezone(tz.offset)}</Text>
-                        </View>
-                    </View>
-                ))}
+            <ScrollView>
+                {filteredClocks.map((clock, index) => {
+                    const cityTime = getTimeForTimezone(clock.offset);
+                    const isCurrentCity = clock.city === 'Hà Nội';
+
+                    return (
+                        <TouchableOpacity
+                            key={index}
+                            style={[styles.clockCard, isCurrentCity && styles.currentCity]}>
+                            <View style={styles.clockInfo}>
+                                <Text style={[styles.cityName, isCurrentCity && styles.currentCityText]}>
+                                    {clock.city}
+                                    {isCurrentCity && ' ★'}
+                                </Text>
+                                <Text style={styles.timezone}>GMT {clock.offset >= 0 ? '+' : ''}{clock.offset}</Text>
+                            </View>
+                            <Text style={[styles.time, isCurrentCity && styles.currentCityText]}>
+                                {cityTime.toLocaleTimeString('vi-VN', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}
+                            </Text>
+                        </TouchableOpacity>
+                    );
+                })}
             </ScrollView>
         </SafeAreaView>
     );
@@ -53,51 +81,61 @@ const WorldClockScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F7F8FA',
+        backgroundColor: '#f5f5f5',
     },
     header: {
-        padding: 20,
-        backgroundColor: '#0866ff',
+        backgroundColor: 'white',
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#e5e7eb',
     },
     title: {
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: 'bold',
-        color: '#FFFFFF',
+        color: '#1f2937',
+        marginBottom: 16,
     },
-    content: {
-        flex: 1,
-        padding: 16,
+    searchInput: {
+        backgroundColor: '#f3f4f6',
+        borderRadius: 8,
+        padding: 12,
+        fontSize: 16,
     },
     clockCard: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: 'white',
+        margin: 16,
+        marginTop: 8,
         padding: 16,
         borderRadius: 12,
-        marginBottom: 12,
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
     },
-    flag: {
-        fontSize: 32,
-        marginRight: 16,
+    currentCity: {
+        backgroundColor: '#eff6ff',
+        borderWidth: 2,
+        borderColor: '#3b82f6',
     },
-    info: {
+    clockInfo: {
         flex: 1,
     },
     cityName: {
         fontSize: 18,
         fontWeight: '600',
-        color: '#1A1D1A',
-        marginBottom: 4,
+        color: '#1f2937',
+    },
+    currentCityText: {
+        color: '#3b82f6',
+    },
+    timezone: {
+        fontSize: 14,
+        color: '#6b7280',
+        marginTop: 4,
     },
     time: {
-        fontSize: 24,
+        fontSize: 28,
         fontWeight: 'bold',
-        color: '#0866ff',
+        color: '#1f2937',
     },
 });
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { addEventToCalendar, updateEvent, listCalendars, getEventColor } from '../services/googleCalendarService';
+import { addEventToCalendar, updateEvent, listCalendars, getEventColor } from '../services/googleCalendarService.native';
 import { useEvents } from '../contexts/EventContext';
 
 export interface Calendar {
@@ -35,7 +35,9 @@ export const useAddEventForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-    const colorPickerRef = useRef<HTMLDivElement>(null);
+    // Note: In RN, use a different approach for closing pickers
+    // This DOM-specific code removed
+    const colorPickerRef = useRef<any>(null);
 
     // Options for recurrence
     const recurrenceOptions = [
@@ -57,17 +59,6 @@ export const useAddEventForm = () => {
             fetchCalendars();
         }
     }, [isModalOpen]);
-
-    // Close color picker on click outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (colorPickerRef.current && !colorPickerRef.current.contains(event.target as Node)) {
-                setShowColorPicker(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
 
     // Reset Form & Set Data on Modal Open
     useEffect(() => {

@@ -25,30 +25,34 @@ const AppNavigator = () => {
                     name="Home"
                     component={HomeScreen}
                     options={{
+                        headerShown: false,
                         tabBarLabel: 'Trang chủ',
-                        tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>🏠</Text>,
+                        tabBarIcon: () => <Text>🏠</Text>,
                     }}
                 />
                 <Tab.Screen
                     name="Calendar"
                     component={CalendarScreen}
                     options={{
+                        headerShown: false,
                         tabBarLabel: 'Lịch',
-                        tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>📅</Text>,
+                        tabBarIcon: () => <Text>📅</Text>,
                     }}
                 />
                 <Tab.Screen
                     name="Converter"
                     component={ConverterScreen}
                     options={{
-                        tabBarLabel: 'Đổi lịch',
-                        tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>🔄</Text>,
+                        headerShown: false,
+                        tabBarLabel: 'Chuyển đổi',
+                        tabBarIcon: () => <Text>🔄</Text>,
                     }}
                 />
                 <Tab.Screen
                     name="Journal"
                     component={JournalScreen}
                     options={{
+                        headerShown: false,
                         tabBarLabel: 'Nhật ký',
                         tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 24 }}>📝</Text>,
                     }}

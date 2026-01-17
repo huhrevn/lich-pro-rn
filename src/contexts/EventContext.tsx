@@ -1,5 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { listUpcomingEvents, getUserProfile, getPrimaryCalendarColor } from '../services/googleCalendarService';
+import {
+  listUpcomingEvents,
+  getUserProfile,
+  getPrimaryCalendarColor,
+} from '../services/googleCalendarService.native';
 
 interface EventContextType {
   events: any[];
@@ -69,20 +73,10 @@ export const EventProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  // 2. Lắng nghe sự kiện login/update profile
+  // 2. Auto-refresh when user logs in (via AuthContext state change)
   useEffect(() => {
-    // Tải lần đầu
+    // Initial load
     loadEvents();
-
-    // Lắng nghe khi user login thành công
-    const handleUpdate = () => {
-      loadEvents();
-    };
-    window.addEventListener('user_profile_updated', handleUpdate);
-
-    return () => {
-      window.removeEventListener('user_profile_updated', handleUpdate);
-    };
   }, []);
 
   // 3. Modal State

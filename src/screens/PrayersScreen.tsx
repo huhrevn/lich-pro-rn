@@ -1,39 +1,45 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     View,
     Text,
+    ScrollView,
     StyleSheet,
     SafeAreaView,
-    ScrollView,
     TouchableOpacity,
 } from 'react-native';
 
 const prayers = [
-    { id: '1', title: 'Kinh Phật Giáo', content: 'Nam mô A Di Đà Phật...' },
-    { id: '2', title: 'Kinh Thiên Chúa Giáo', content: 'Lạy Cha chúng con ở trên trời...' },
-    { id: '3', title: 'Lời cầu nguyện', content: 'Xin ban phước lành...' },
+    {
+        title: 'Kinh Phật Đản Sinh',
+        content: 'Nam mô Bổn sư Thích ca Mâu ni Phật...',
+    },
+    {
+        title: 'Lời nguyện sáng',
+        content: 'Xin cho con được bình an trong ngày mới...',
+    },
+    {
+        title: 'Lời cảm ơn',
+        content: 'Con xin tri ân những điều tốt đẹp...',
+    },
+    {
+        title: 'Cầu an cho gia đình',
+        content: 'Xin cho gia đình luôn sum vầy hạnh phúc...',
+    },
 ];
 
 const PrayersScreen = () => {
-    const [selectedPrayer, setSelectedPrayer] = useState<string | null>(null);
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Kinh cầu</Text>
+                <Text style={styles.title}>Lời Nguyện</Text>
+                <Text style={styles.subtitle}>Các lời cầu nguyện & kinh văn</Text>
             </View>
 
-            <ScrollView style={styles.content}>
-                {prayers.map((prayer) => (
-                    <TouchableOpacity
-                        key={prayer.id}
-                        style={styles.prayerCard}
-                        onPress={() => setSelectedPrayer(selectedPrayer === prayer.id ? null : prayer.id)}
-                    >
-                        <Text style={styles.prayerTitle}>🙏 {prayer.title}</Text>
-                        {selectedPrayer === prayer.id && (
-                            <Text style={styles.prayerContent}>{prayer.content}</Text>
-                        )}
+            <ScrollView>
+                {prayers.map((prayer, index) => (
+                    <TouchableOpacity key={index} style={styles.card}>
+                        <Text style={styles.prayerTitle}>{prayer.title}</Text>
+                        <Text style={styles.prayerContent}>{prayer.content}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
@@ -44,41 +50,40 @@ const PrayersScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F7F8FA',
+        backgroundColor: '#f5f5f5',
     },
     header: {
+        backgroundColor: 'white',
         padding: 20,
-        backgroundColor: '#0866ff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#e5e7eb',
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#FFFFFF',
+        color: '#1f2937',
     },
-    content: {
-        flex: 1,
-        padding: 16,
+    subtitle: {
+        fontSize: 14,
+        color: '#6b7280',
+        marginTop: 4,
     },
-    prayerCard: {
-        backgroundColor: '#FFFFFF',
+    card: {
+        backgroundColor: 'white',
+        margin: 16,
+        marginTop: 8,
         padding: 16,
         borderRadius: 12,
-        marginBottom: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
     },
     prayerTitle: {
         fontSize: 18,
         fontWeight: '600',
-        color: '#1A1D1A',
+        color: '#1f2937',
+        marginBottom: 12,
     },
     prayerContent: {
         fontSize: 16,
-        color: '#5F6368',
-        marginTop: 12,
+        color: '#4b5563',
         lineHeight: 24,
     },
 });

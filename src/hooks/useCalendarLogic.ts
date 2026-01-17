@@ -6,10 +6,10 @@ import { SOLAR_HOLIDAYS, LUNAR_HOLIDAYS } from '../constants/calendarConstants';
 export const useCalendarLogic = () => {
     // --- STATE ---
     const [currentDate, setCurrentDate] = useState(new Date());
-    
+
     // Picker State
     const [isPickerOpen, setIsPickerOpen] = useState(false);
-    
+
     // Search State
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,7 +23,7 @@ export const useCalendarLogic = () => {
     const events = useMemo(() => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const currentYear = currentDate.getFullYear(); 
+        const currentYear = currentDate.getFullYear();
 
         let resultEvents: CalendarEvent[] = [];
 
@@ -37,13 +37,13 @@ export const useCalendarLogic = () => {
                 if (def.name.toLowerCase().includes(query)) {
                     const [d, m] = key.split('-').map(Number);
                     const eventDate = new Date(currentYear, m - 1, d);
-                    
+
                     if (eventDate.getFullYear() < 1900 || eventDate.getFullYear() > 2100) return;
 
                     try {
                         const l = lunisolar(eventDate);
                         const isLeap = (l.lunar as any).isLeap;
-                        
+
                         const diffTime = eventDate.getTime() - today.getTime();
                         const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -56,7 +56,7 @@ export const useCalendarLogic = () => {
                             daysLeft: daysLeft,
                             isSearchMatch: true
                         });
-                    } catch (e) {}
+                    } catch (e) { }
                 }
             });
 
@@ -64,10 +64,10 @@ export const useCalendarLogic = () => {
             Object.entries(LUNAR_HOLIDAYS).forEach(([key, def]) => {
                 if (def.name.toLowerCase().includes(query)) {
                     const [d, m] = key.split('-').map(Number);
-                    
+
                     // Simple scan for the lunar date in the current year
                     let scanDate = new Date(currentYear, 0, 1);
-                    for (let i=0; i<365 + (isLeapYear(currentYear)?1:0); i++) {
+                    for (let i = 0; i < 365 + (isLeapYear(currentYear) ? 1 : 0); i++) {
                         if (scanDate.getFullYear() < 1900 || scanDate.getFullYear() > 2100) {
                             scanDate.setDate(scanDate.getDate() + 1);
                             continue;
@@ -88,9 +88,9 @@ export const useCalendarLogic = () => {
                                     daysLeft: daysLeft,
                                     isSearchMatch: true
                                 });
-                                break; 
+                                break;
                             }
-                        } catch (e) {}
+                        } catch (e) { }
                         scanDate.setDate(scanDate.getDate() + 1);
                     }
                 }
@@ -106,8 +106,8 @@ export const useCalendarLogic = () => {
 
                 if (d > 0 && d <= 31 && m > 0 && m <= 12) {
                     if (isLunarSearch) {
-                         let scanDate = new Date(currentYear, 0, 1);
-                         for (let i=0; i<380; i++) {
+                        let scanDate = new Date(currentYear, 0, 1);
+                        for (let i = 0; i < 380; i++) {
                             if (scanDate.getFullYear() >= 1900 && scanDate.getFullYear() <= 2100) {
                                 try {
                                     const l = lunisolar(scanDate);
@@ -126,10 +126,10 @@ export const useCalendarLogic = () => {
                                         });
                                         break;
                                     }
-                                } catch(e){}
+                                } catch (e) { }
                             }
                             scanDate.setDate(scanDate.getDate() + 1);
-                         }
+                        }
                     } else {
                         const solarDate = new Date(currentYear, m - 1, d);
                         if (solarDate.getFullYear() >= 1900 && solarDate.getFullYear() <= 2100) {
@@ -138,7 +138,7 @@ export const useCalendarLogic = () => {
                                 const isLeap = (l.lunar as any).isLeap;
                                 const diffTime = solarDate.getTime() - today.getTime();
                                 const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                                
+
                                 searchResults.push({
                                     date: solarDate,
                                     lunarDateStr: `${l.lunar.day}/${l.lunar.month} ${isLeap ? '(Nhuận) ' : ''}ÂL`,
@@ -148,7 +148,7 @@ export const useCalendarLogic = () => {
                                     daysLeft: daysLeft,
                                     isSearchMatch: true
                                 });
-                            } catch(e){}
+                            } catch (e) { }
                         }
                     }
                 }
@@ -158,7 +158,7 @@ export const useCalendarLogic = () => {
         } else {
             // MODE 2: SCAN EVENTS AROUND SELECTED DATE
             const rangeStart = new Date(currentDate);
-            rangeStart.setDate(currentDate.getDate() - 45); 
+            rangeStart.setDate(currentDate.getDate() - 45);
 
             for (let i = 0; i <= 90; i++) {
                 const dateCheck = new Date(rangeStart);
@@ -187,7 +187,7 @@ export const useCalendarLogic = () => {
                             type: 'SOLAR',
                             daysLeft: daysLeft
                         });
-                    } catch (e) {}
+                    } catch (e) { }
                 }
 
                 // Lunar Holidays
@@ -195,7 +195,7 @@ export const useCalendarLogic = () => {
                     const l = lunisolar(dateCheck);
                     const lunarKey = `${l.lunar.day}-${l.lunar.month}`;
                     const isLeap = (l.lunar as any).isLeap;
-                    
+
                     if (LUNAR_HOLIDAYS[lunarKey] && !isLeap) {
                         resultEvents.push({
                             date: new Date(dateCheck),
@@ -206,7 +206,7 @@ export const useCalendarLogic = () => {
                             daysLeft: daysLeft
                         });
                     }
-                } catch (e) {}
+                } catch (e) { }
             }
             resultEvents.sort((a, b) => a.date.getTime() - b.date.getTime());
         }
@@ -218,14 +218,14 @@ export const useCalendarLogic = () => {
         const newDate = new Date(currentDate);
         newDate.setFullYear(year);
         newDate.setMonth(monthIndex);
-        newDate.setDate(1); 
+        newDate.setDate(1);
         setCurrentDate(newDate);
         setIsPickerOpen(false);
     };
 
     const handleEventClick = (event: CalendarEvent) => {
         setCurrentDate(new Date(event.date));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Note: No window.scrollTo in React Native
     };
 
     const handleClearSearch = () => {

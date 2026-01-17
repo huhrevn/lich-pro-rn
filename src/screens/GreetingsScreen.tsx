@@ -2,30 +2,45 @@ import React from 'react';
 import {
     View,
     Text,
+    ScrollView,
     StyleSheet,
     SafeAreaView,
-    ScrollView,
+    TouchableOpacity,
 } from 'react-native';
 
+const greetings = [
+    { occasion: 'Tết Nguyên Đán', template: 'Chúc mừng năm mới! Vạn sự như ý!' },
+    { occasion: 'Sinh nhật', template: 'Chúc mừng sinh nhật! Tuổi mới vạn sự như ý!' },
+    { occasion: 'Đám cưới', template: 'Chúc mừng hạnh phúc! Trăm năm hạnh phúc!' },
+    { occasion: 'Khai trương', template: 'Chúc mừng khai trương! Vạn sự như ý!' },
+    { occasion: 'Tốt nghiệp', template: 'Chúc mừng tốt nghiệp! Thành công rực rỡ!' },
+    { occasion: 'Thăng chức', template: 'Chúc mừng thăng chức! Sự nghiệp thăng tiến!' },
+];
+
 const GreetingsScreen = () => {
-    const greetings = [
-        { occasion: 'Sinh nhật', message: 'Chúc mừng sinh nhật! 🎂' },
-        { occasion: 'Tết Nguyên Đán', message: 'Chúc mừng năm mới! 🎊' },
-        { occasion: 'Giáng sinh', message: 'Merry Christmas! 🎄' },
-        { occasion: 'Tết Trung thu', message: 'Chúc mừng Tết Trung thu! 🥮' },
-    ];
+    const handleCopy = (text: string) => {
+        console.log('Copied:', text);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Lời chúc</Text>
+                <Text style={styles.title}>Lời Chúc</Text>
+                <Text style={styles.subtitle}>Mẫu lời chúc cho các dịp đặc biệt</Text>
             </View>
 
-            <ScrollView style={styles.content}>
-                {greetings.map((greeting, index) => (
-                    <View key={index} style={styles.greetingCard}>
-                        <Text style={styles.occasion}>{greeting.occasion}</Text>
-                        <Text style={styles.message}>{greeting.message}</Text>
+            <ScrollView>
+                {greetings.map((item, index) => (
+                    <View key={index} style={styles.card}>
+                        <View style={styles.cardHeader}>
+                            <Text style={styles.occasion}>{item.occasion}</Text>
+                            <TouchableOpacity
+                                onPress={() => handleCopy(item.template)}
+                                style={styles.copyButton}>
+                                <Text style={styles.copyButtonText}>Sao chép</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={styles.template}>{item.template}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -36,42 +51,57 @@ const GreetingsScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F7F8FA',
+        backgroundColor: '#f5f5f5',
     },
     header: {
+        backgroundColor: 'white',
         padding: 20,
-        backgroundColor: '#0866ff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#e5e7eb',
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#FFFFFF',
+        color: '#1f2937',
     },
-    content: {
-        flex: 1,
+    subtitle: {
+        fontSize: 14,
+        color: '#6b7280',
+        marginTop: 4,
+    },
+    card: {
+        backgroundColor: 'white',
+        margin: 16,
+        marginTop: 8,
         padding: 16,
-    },
-    greetingCard: {
-        backgroundColor: '#FFFFFF',
-        padding: 20,
         borderRadius: 12,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
     },
     occasion: {
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: '600',
-        color: '#5F6368',
-        marginBottom: 8,
+        color: '#1f2937',
     },
-    message: {
-        fontSize: 20,
-        color: '#1A1D1A',
-        lineHeight: 28,
+    copyButton: {
+        backgroundColor: '#3b82f6',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 6,
+    },
+    copyButtonText: {
+        color: 'white',
+        fontSize: 12,
+        fontWeight: '600',
+    },
+    template: {
+        fontSize: 16,
+        color: '#4b5563',
+        lineHeight: 24,
     },
 });
 

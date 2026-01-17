@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { getUserProfile } from '../../services/googleCalendarService';
-import { LocationData, WeatherData, SearchResult, UserProfile } from '../../types/homeTypes';
-import { DEFAULT_LOCATION, DEFAULT_WEATHER } from '../../constants/homeConstants';
-import { SOLAR_HOLIDAYS, LUNAR_HOLIDAYS } from '../../constants/calendarConstants';
+import { getUserProfile } from '../services/googleCalendarService.native';
+import { LocationData, WeatherData, SearchResult, UserProfile } from '../types/homeTypes';
+import { DEFAULT_LOCATION, DEFAULT_WEATHER } from '../constants/homeConstants';
+import { SOLAR_HOLIDAYS, LUNAR_HOLIDAYS } from '../constants/calendarConstants';
 import lunisolar from 'lunisolar';
 
 export const useHomeLogic = () => {
@@ -52,12 +52,8 @@ export const useHomeLogic = () => {
         };
         loadUser();
 
-        // Listen for profile updates
-        window.addEventListener('user_profile_updated', loadUser);
-
         return () => {
             clearInterval(timer);
-            window.removeEventListener('user_profile_updated', loadUser);
         }
     }, []);
 
