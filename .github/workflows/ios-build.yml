@@ -27,10 +27,25 @@ jobs:
           cd ios
           pod install
 
+      - name: List iOS Directory
+        run: |
+          cd ios
+          ls -la
+          echo "--- Checking for workspace ---"
+          ls -la *.xcworkspace || echo "No workspace found"
+          echo "--- Checking for project ---"
+          ls -la *.xcodeproj || echo "No project found"
+
       - name: Build iOS App
         run: |
           cd ios
-          xcodebuild -workspace LichProRN.xcworkspace -scheme LichProRN -configuration Release -destination generic/platform=iOS -archivePath build/LichProRN.xcarchive archive CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO
+          if [ -d "LichProRN.xcworkspace" ]; then
+            echo "Building with workspace..."
+            xcodebuild -workspace LichProRN.xcworkspace -scheme LichProRN -configuration Release -destination generic/platform=iOS -archivePath build/LichProRN.xcarchive archive CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO
+          else
+            echo "Building with project..."
+            xcodebuild -project LichProRN.xcodeproj -scheme LichProRN -configuration Release -destination generic/platform=iOS -archivePath build/LichProRN.xcarchive archive CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" CODE_SIGNING_ALLOWED=NO
+          fi
           
       - name: Create IPA Package
         run: |
